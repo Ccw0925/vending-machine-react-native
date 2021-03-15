@@ -29,7 +29,7 @@ const dataList = [{name: 'Coca-Cola', image: 'https://cached.imagescaler.hbpl.co
                   {name: 'Sprite', image: 'https://trottospizza.com/wp-content/uploads/2017/11/Sprite_Can_375ml_1_1024x1024-e1443056044254.png',price: 2.30}, 
                   {name: '100 Plus', image: 'https://www.pantryexpress.my/27-thickbox_default/100-plus-325ml-x-24-original.jpg', price: 1.40}];
 const WIDTH = Dimensions.get('window').width
-const numColumns = 2
+const numColumns = 3
 
 const leftTop = {
   borderLeftWidth: 4,
