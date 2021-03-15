@@ -25,7 +25,7 @@ import * as Permissions from 'expo-permissions';
 //     console.log("Code String: " + codeStr);
 //   });
 // }
-const dataList = [{name: 'Coca-Cola', image: 'https://cached.imagescaler.hbpl.co.uk/resize/scaleWidth/888/cached.offlinehbpl.hbpl.co.uk/news/ORP/Coke-20150730041122131.JPG',price: 1.70}, 
+const dataList = [{name: 'Coc-Cola', image: 'https://cached.imagescaler.hbpl.co.uk/resize/scaleWidth/888/cached.offlinehbpl.hbpl.co.uk/news/ORP/Coke-20150730041122131.JPG',price: 1.70}, 
                   {name: 'Sprite', image: 'https://trottospizza.com/wp-content/uploads/2017/11/Sprite_Can_375ml_1_1024x1024-e1443056044254.png',price: 2.30}, 
                   {name: '100 Plus', image: 'https://www.pantryexpress.my/27-thickbox_default/100-plus-325ml-x-24-original.jpg', price: 1.40}];
 const WIDTH = Dimensions.get('window').width
