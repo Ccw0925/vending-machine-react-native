@@ -75,10 +75,11 @@ export default class App extends Component {
   }
 
   handleBarCodeScanned = ({ type, data }) => {
-    this.setState({ scanned: !this.state.scanned })
+    this.setState({ scanned: true })
     this.setState({ shouldShowQrScanner: !this.state.shouldShowQrScanner })
     this.setState({ shouldShowModal: !this.state.shouldShowModal })
     alert(`(TESTING ONLY) Scanned data: ${data}`);
+    this.setState({ scanned: false })
   }
 
   formatData = (dataList, numColumns) => {
@@ -117,7 +118,7 @@ export default class App extends Component {
       <SafeAreaView style={{ flex: 1 }}>
         {this.state.shouldShowQrScanner ? (<View style={{ flex: 1 }}>
          <Camera
-         onBarCodeScanned={this.state.scanned ? undefined : this.handleBarCodeScanned}
+         onBarCodeScanned={this.state.scanned ? console.log('undefined') : this.handleBarCodeScanned}
          style={StyleSheet.absoluteFillObject}
       />
       <View style={{ height: Dimensions.get('window').height / 2 - WIDTH / 4, width: WIDTH, backgroundColor: 'black', opacity: 0.5 }}></View>
