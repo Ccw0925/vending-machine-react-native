@@ -1,5 +1,5 @@
 import React, {Component, useState} from 'react';
-import { StyleSheet, Text, View, FlatList, Dimensions, SafeAreaView, Image, Button, Modal, TouchableOpacity} from 'react-native';
+import { StyleSheet, PermissionsAndroid, Text, View, FlatList, Dimensions, SafeAreaView, Image, Button, Modal, TouchableOpacity} from 'react-native';
 import { Camera } from 'expo-camera';
 import * as Permissions from 'expo-permissions';
 // import * as firebase from 'firebase';
@@ -52,22 +52,33 @@ const rightBottom = {
   borderColor: 'white'
 };
 
-const requestCameraPermission = async () => {
-  const { status } = await Permissions.askAsync(Permissions.CAMERA);
-  
-  setCamera(prevState => ({ ...prevState, hasCameraPermission: status === 'granted'}));
-
-};
-
 export default class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      hasPermission: false,
       shouldShowQrScanner: false,
       shouldShowModal: false,
       scanned: false,
       index: 0
     }
+  }
+
+  async componentDidMount() {
+    const { status } = await Permissions.askAsync(Permissions.CAMERA);
+    this.setState({ hasPermission: status === 'granted' });
+  }
+
+  async requestCameraPermission() {
+    const { status } = await Permissions.askAsync(Permissions.CAMERA);
+    this.setState({ hasPermission: status === 'granted' });
+  }
+
+  handleBarCodeScanned = ({ type, data }) => {
+    this.setState({ scanned: !this.state.scanned })
+    this.setState({ shouldShowQrScanner: !this.state.shouldShowQrScanner })
+    this.setState({ shouldShowModal: !this.state.shouldShowModal })
+    alert(`(TESTING ONLY) Scanned data: ${data}`);
   }
 
   formatData = (dataList, numColumns) => {
@@ -101,12 +112,12 @@ export default class App extends Component {
   }
 
   render() {
-    let {container, itemText, modalStyle, modalText, productDetails, buttonStyle, buttonFlex} = styles
+    let {container, itemText, modalStyle, modalText, productDetails, buttonStyle, buttonFlex, qrBackButton} = styles
     return (
       <SafeAreaView style={{ flex: 1 }}>
         {this.state.shouldShowQrScanner ? (<View style={{ flex: 1 }}>
          <Camera
-         onBarCodeScanned={this.state.scanned ? undefined : console.log('test')}
+         onBarCodeScanned={this.state.scanned ? undefined : this.handleBarCodeScanned}
          style={StyleSheet.absoluteFillObject}
       />
       <View style={{ height: Dimensions.get('window').height / 2 - WIDTH / 4, width: WIDTH, backgroundColor: 'black', opacity: 0.5 }}></View>
@@ -117,7 +128,7 @@ export default class App extends Component {
           <View style={{ flex: 1, backgroundColor: 'black' }}></View>
         </View>
         <View style={{ height: Dimensions.get('window').height / 2 - WIDTH / 4, width: WIDTH, backgroundColor: 'black', opacity: 0.5 }}></View>
-        <View style={{ ...StyleSheet.absoluteFillObject, alignItems: 'center', justifyContent:'center' }}>
+        <View style={{ ...StyleSheet.absoluteFillObject, alignItems: 'center', paddingTop: Dimensions.get('window').height / 2 - WIDTH / 4 }}>
           <View style={{ width: WIDTH / 2, height: WIDTH / 2 }}>
             <View style={{ flex: 1, flexDirection: 'row' }}>
               <View style={{ flex: 1, ...leftTop }}></View>
@@ -131,11 +142,13 @@ export default class App extends Component {
               <View style={{ flex: 1, ...rightBottom }}></View>
             </View>
           </View>
-          <Button 
-                color='red'
-                title="Back"
-                onPress={() => this.setState({ shouldShowQrScanner: !this.state.shouldShowQrScanner })}
-                />
+          <View style={qrBackButton}>
+            <Button 
+                  color='red'
+                  title="Back"
+                  onPress={() => this.setState({ shouldShowQrScanner: !this.state.shouldShowQrScanner })}
+                  />
+          </View>
         </View>
       </View>
       ) : (<View style={container}>
@@ -168,7 +181,7 @@ export default class App extends Component {
                 <Button 
                 color='blue'
                 title="Pay"
-                onPress={() => this.setState({ shouldShowQrScanner: !this.state.shouldShowQrScanner })}
+                onPress={() => this.state.hasPermission ? this.setState({ shouldShowQrScanner: !this.state.shouldShowQrScanner }) : this.requestCameraPermission}
                 />
             </View>
             </View>
@@ -222,5 +235,11 @@ const styles = StyleSheet.create({
   },
   buttonFlex: {
     flex: 1
+  },
+  qrBackButton: {
+    position: 'absolute',
+    bottom: 0,
+    right: 0,
+    left: 0
   }
 });
