@@ -78,7 +78,10 @@ export default class App extends Component {
     this.setState({ scanned: true })
     this.setState({ shouldShowQrScanner: !this.state.shouldShowQrScanner })
     this.setState({ shouldShowModal: !this.state.shouldShowModal })
-    alert(`(TESTING ONLY) Scanned data: ${data}`);
+    if (data === 'Ziizx')
+      alert('Payment Success! Please wait for the item to be dispensed.');
+    else
+      alert('Invalid QR code!')
     this.setState({ scanned: false })
   }
 
