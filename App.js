@@ -1,5 +1,5 @@
 import React, {Component, useState} from 'react';
-import { StyleSheet, PermissionsAndroid, Text, View, FlatList, Dimensions, SafeAreaView, Image, Button, Modal, TouchableOpacity} from 'react-native';
+import { StyleSheet, PermissionsAndroid, Text, View, FlatList, Dimensions, SafeAreaView, Image, Button, Modal, TouchableOpacity, Alert} from 'react-native';
 import { Camera } from 'expo-camera';
 import * as Permissions from 'expo-permissions';
 // import * as firebase from 'firebase';
@@ -79,7 +79,7 @@ export default class App extends Component {
     this.setState({ shouldShowQrScanner: !this.state.shouldShowQrScanner })
     this.setState({ shouldShowModal: !this.state.shouldShowModal })
     if (data === 'Ziizx')
-      alert('Payment Success! Please wait for the item to be dispensed.');
+      Alert.alert('Payment Success', 'Payment Success! Please wait for the item to be dispensed.');
     else
       alert('Invalid QR code!')
     this.setState({ scanned: false })
