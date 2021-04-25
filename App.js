@@ -88,6 +88,9 @@ export default class App extends Component {
       else {
         userBalance.set(readBalance - dataList[this.state.index].price.toFixed(2));
         Alert.alert('Payment Success', 'Payment Success! Please wait for the item to be dispensed.');
+
+        firebase.database().ref('User/Aziz/Vending/Dispense').set('PENDING');
+        firebase.database().ref('User/Aziz/Vending/Product').set(this.state.index + 1);
       }
   });
   }
