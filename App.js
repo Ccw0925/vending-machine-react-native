@@ -2,29 +2,24 @@ import React, {Component, useState} from 'react';
 import { StyleSheet, PermissionsAndroid, Text, View, FlatList, Dimensions, SafeAreaView, Image, Button, Modal, TouchableOpacity, Alert} from 'react-native';
 import { Camera } from 'expo-camera';
 import * as Permissions from 'expo-permissions';
-// import * as firebase from 'firebase';
+import * as firebase from 'firebase';
 
-// var firebaseConfig = {
-//   apiKey: "AIzaSyAS_d1ZN-cErWHrQardjeSLrqXsBofBSws",
-//   authDomain: "vendingmachine-e55bc.firebaseapp.com",
-//   databaseURL: "https://vendingmachine-e55bc.firebaseio.com",
-//   projectId: "vendingmachine-e55bc",
-//   storageBucket: "vendingmachine-e55bc.appspot.com",
-//   messagingSenderId: "532545534846",
-//   appId: "1:532545534846:web:4e4433a8853581a00a112f",
-//   measurementId: "G-2DWNMMY7V8"
-// };
+var firebaseConfig = {
+  apiKey: "AIzaSyAS_d1ZN-cErWHrQardjeSLrqXsBofBSws",
+  authDomain: "vendingmachine-e55bc.firebaseapp.com",
+  databaseURL: "https://vendingmachine-e55bc.firebaseio.com",
+  projectId: "vendingmachine-e55bc",
+  storageBucket: "vendingmachine-e55bc.appspot.com",
+  messagingSenderId: "532545534846",
+  appId: "1:532545534846:web:4e4433a8853581a00a112f",
+  measurementId: "G-2DWNMMY7V8"
+};
 
-// // Initialize Firebase
-// if (!firebase.apps.length) {
-//   firebase.initializeApp(firebaseConfig);
-// }
-// const getQrcode = (codeId) => {
-//   firebase.database().ref('Qrcode/' + codeId).on('value', (snapshot) => {
-//     const codeStr = snapshot.val();
-//     console.log("Code String: " + codeStr);
-//   });
-// }
+// Initialize Firebase
+if (!firebase.apps.length) {
+  firebase.initializeApp(firebaseConfig);
+}
+
 const dataList = [{name: 'Coca-Cola', image: 'https://cached.imagescaler.hbpl.co.uk/resize/scaleWidth/888/cached.offlinehbpl.hbpl.co.uk/news/ORP/Coke-20150730041122131.JPG',price: 1.70}, 
                   {name: 'Sprite', image: 'https://trottospizza.com/wp-content/uploads/2017/11/Sprite_Can_375ml_1_1024x1024-e1443056044254.png',price: 2.30}, 
                   {name: '100 Plus', image: 'https://www.pantryexpress.my/27-thickbox_default/100-plus-325ml-x-24-original.jpg', price: 1.40}];
@@ -74,14 +69,36 @@ export default class App extends Component {
     this.setState({ hasPermission: status === 'granted' });
   }
 
+  getQrcode = (codeId) => {
+    var codeStr = '';
+    firebase.database().ref('User/Aziz/Qr').on('value', (snapshot) => {
+      codeStr = snapshot.val();
+      console.log("Code String: " + codeStr);
+    });
+    return codeStr;
+  }
+
+  deductUserBalance = () => {
+    var userBalance = firebase.database().ref('User/Aziz/Balance');
+    userBalance.once('value').then(snapshot => {
+      userBalance.set(snapshot.val() - 1);
+  });
+  }
+
   handleBarCodeScanned = ({ type, data }) => {
     this.setState({ scanned: true })
     this.setState({ shouldShowQrScanner: !this.state.shouldShowQrScanner })
     this.setState({ shouldShowModal: !this.state.shouldShowModal })
-    if (data === 'Ziizx')
+    const qrCode = this.getQrcode();
+
+    if (data === qrCode) {
+      this.deductUserBalance();
+
       Alert.alert('Payment Success', 'Payment Success! Please wait for the item to be dispensed.');
-    else
+    }
+    else 
       alert('Invalid QR code!')
+
     this.setState({ scanned: false })
   }
 
