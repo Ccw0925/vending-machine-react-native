@@ -81,7 +81,14 @@ export default class App extends Component {
   deductUserBalance = () => {
     var userBalance = firebase.database().ref('User/Aziz/Balance');
     userBalance.once('value').then(snapshot => {
-      userBalance.set(snapshot.val() - 1);
+      var readBalance = snapshot.val();
+      
+      if ((readBalance - 1) < 0)
+        Alert.alert("Insufficient Balance", "Fuck you go get the money, poor!");
+      else {
+        userBalance.set(readBalance - 1);
+        Alert.alert('Payment Success', 'Payment Success! Please wait for the item to be dispensed.');
+      }
   });
   }
 
@@ -93,8 +100,6 @@ export default class App extends Component {
 
     if (data === qrCode) {
       this.deductUserBalance();
-
-      Alert.alert('Payment Success', 'Payment Success! Please wait for the item to be dispensed.');
     }
     else 
       alert('Invalid QR code!')
