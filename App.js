@@ -83,10 +83,10 @@ export default class App extends Component {
     userBalance.once('value').then(snapshot => {
       var readBalance = snapshot.val();
       
-      if ((readBalance - 1) < 0)
+      if ((readBalance - dataList[this.state.index].price.toFixed(2)) < 0)
         Alert.alert("Insufficient Balance", "Fuck you go get the money, poor!");
       else {
-        userBalance.set(readBalance - 1);
+        userBalance.set(readBalance - dataList[this.state.index].price.toFixed(2));
         Alert.alert('Payment Success', 'Payment Success! Please wait for the item to be dispensed.');
       }
   });
