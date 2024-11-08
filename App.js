@@ -5,14 +5,14 @@ import * as Permissions from 'expo-permissions';
 import * as firebase from 'firebase';
 
 var firebaseConfig = {
-  apiKey: "AIzaSyAS_d1ZN-cErWHrQardjeSLrqXsBofBSws",
-  authDomain: "vendingmachine-e55bc.firebaseapp.com",
-  databaseURL: "https://vendingmachine-e55bc.firebaseio.com",
-  projectId: "vendingmachine-e55bc",
-  storageBucket: "vendingmachine-e55bc.appspot.com",
-  messagingSenderId: "532545534846",
-  appId: "1:532545534846:web:4e4433a8853581a00a112f",
-  measurementId: "G-2DWNMMY7V8"
+  apiKey: "apiKey here",
+  authDomain: "authDomain here",
+  databaseURL: "databaseURL here",
+  projectId: "projectId here",
+  storageBucket: "storageBucket here",
+  messagingSenderId: "messagingSenderId here",
+  appId: "appId here",
+  measurementId: "measurementId here",
 };
 
 // Initialize Firebase
